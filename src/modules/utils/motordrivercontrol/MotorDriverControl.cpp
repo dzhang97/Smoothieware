@@ -565,7 +565,7 @@ void MotorDriverControl::on_console_line_received(void *argument) {
 void MotorDriverControl::WriteReadSPIstr(const char* p, StreamOutput* stream)
 {
     int x,xx;
-    uint8_t nib,paw=0,buf[40];
+    uint8_t nib,paw=0,buf[40],buf2[40];
 
     //stream->printf("WriteReadSPIstr: %s\n",p);
 
@@ -602,7 +602,7 @@ void MotorDriverControl::WriteReadSPIstr(const char* p, StreamOutput* stream)
             //    for (int n=0; n<x; n++) stream->printf("%02X",buf[n]);
             //    stream->printf("\n");
             //}
-            if (paw!='p') sendSPI(buf,x,NULL);  // Send (and dump received) data on SPI bus.
+            if (paw!='p') sendSPI(buf,x,buf2);  // Send (and dump received) data on SPI bus.
             if (paw) {  // If print-after-write, then print received data.
                 sendSPI(buf,x,buf);    // Send and receive data on SPI bus.
                 if (stream) {
