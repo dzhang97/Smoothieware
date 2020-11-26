@@ -10,6 +10,7 @@
 #include "modules/communication/utils/Gcode.h"
 #include "modules/robot/Conveyor.h"
 #include "modules/robot/ActuatorCoordinates.h"
+#include "modules/utils/motordrivercontrol/MotorDriverControl.h"
 #include "Endstops.h"
 #include "libs/nuts_bolts.h"
 #include "libs/Pin.h"
@@ -690,6 +691,10 @@ void Endstops::home(axis_bitmap_t a)
     // Start moving the axes to the origin
     this->status = MOVING_TO_ENDSTOP_FAST;
 
+    for (int i = 0; i < MOTORDRVSSIZE; ++i) {
+        MOTORDRVS[i]->set_stallguard(true);
+    }
+
     THEROBOT->disable_segmentation= true; // we must disable segmentation as this won't work with it enabled
 
     if(!home_z_first) home_xy();
@@ -796,6 +801,10 @@ void Endstops::home(axis_bitmap_t a)
     THEROBOT->disable_segmentation= false;
     if (is_scara) {
         THEROBOT->disable_arm_solution = false;  // Arm solution enabled again.
+    }
+
+    for (int i = 0; i < MOTORDRVSSIZE; ++i) {
+        MOTORDRVS[i]->set_stallguard(false);
     }
 
     this->status = NOT_HOMING;
