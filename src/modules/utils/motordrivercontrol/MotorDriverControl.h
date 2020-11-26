@@ -5,6 +5,9 @@
 
 #include <stdint.h>
 
+#define MOTORDRVS MotorDriverControl::instances
+#define MOTORDRVSSIZE MotorDriverControl::num_instances
+
 namespace mbed {
     class SPI;
 }
@@ -19,6 +22,8 @@ class MotorDriverControl : public Module {
     public:
         MotorDriverControl(uint8_t id);
         virtual ~MotorDriverControl();
+        static MotorDriverControl** instances;
+        static size_t num_instances;
 
         void on_module_loaded();
         void on_gcode_received(void *);
@@ -27,6 +32,7 @@ class MotorDriverControl : public Module {
         void on_enable(void *argument);
         void on_idle(void *argument);
         void on_second_tick(void *argument);
+        void set_stallguard(bool on);
 
     private:
         bool config_module(uint16_t cs);
