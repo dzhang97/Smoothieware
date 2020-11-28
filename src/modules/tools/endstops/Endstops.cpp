@@ -691,7 +691,7 @@ void Endstops::home(axis_bitmap_t a)
     // Start moving the axes to the origin
     this->status = MOVING_TO_ENDSTOP_FAST;
 
-    for (int i = 0; i < MOTORDRVSSIZE; ++i) {
+    for (size_t i = 0; i < MOTORDRVSSIZE; ++i) {
         MOTORDRVS[i]->set_stallguard(true);
     }
 
